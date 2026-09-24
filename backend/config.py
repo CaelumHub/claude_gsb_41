@@ -55,7 +55,10 @@ CONTRACT_ADDR_PREFIX = "0xc"
 # ---------------------------------------------------------------------------
 # Dashboard / statistics display tunables
 # ---------------------------------------------------------------------------
-STATS_GROUP_COINBASE_AS_TRANSFER = True
+# Coinbase (block reward) transactions are their own category in the stats
+# breakdown; folding them into "transfer" inflates the transfer count and makes
+# the type composition fail to reconcile with the on-chain transaction total.
+STATS_GROUP_COINBASE_AS_TRANSFER = False
 BLOCK_INTERVAL_SCALE = 1000.0
 DIFFICULTY_SERIES_TAIL_DROP = 1
 TOP_ACCOUNT_SORT_FIELD = "nonce"

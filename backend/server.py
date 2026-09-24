@@ -509,17 +509,21 @@ def create_app(node):
     def stats_overview():
         bc = node.blockchain
         blocks = bc.chain
-        total_tx = sum(len(b.transactions) for b in blocks)
         counts = bc.tx_type_counts()
         transfers = counts.get("transfer", 0)
         calls = counts.get("call", 0)
         deploys = counts.get("deploy", 0)
+        coinbase = counts.get("coinbase", 0)
+        # Every on-chain transaction belongs to exactly one of the four
+        # categories above, so the breakdown always reconciles with this total.
+        total_tx = transfers + calls + deploys + coinbase
         avg_interval = bc.avg_block_interval(20)
         top = bc.top_accounts(10)
         return _json({
             "height": bc.height, "total_blocks": len(blocks),
             "total_tx": total_tx, "transfers": transfers, "calls": calls,
-            "deploys": deploys, "accounts": len(bc.state.accounts),
+            "deploys": deploys, "coinbase": coinbase,
+            "accounts": len(bc.state.accounts),
             "contracts": len(bc.state.contracts),
             "txpool": node.txpool.size(), "chainwork": bc.chainwork,
             "avg_block_interval": round(avg_interval, 2),

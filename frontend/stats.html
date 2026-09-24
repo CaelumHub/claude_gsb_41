@@ -98,9 +98,11 @@ function renderOverview(o) {
 }
 
 function renderBreakdown(o) {
-  const coinbase = o.total_blocks; // one coinbase per block
+  // Coinbase count comes from the backend; estimating it from the block count
+  // double-counts (the genesis block carries no coinbase transaction).
   const counts = {
-    transfer: o.transfers, deploy: o.deploys, call: o.calls, coinbase,
+    transfer: o.transfers, deploy: o.deploys, call: o.calls,
+    coinbase: o.coinbase || 0,
   };
   const total = Object.values(counts).reduce((a, b) => a + b, 0) || 1;
   $("#txBreakdown").innerHTML = Object.entries(counts).map(([k, v]) => `
