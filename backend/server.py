@@ -514,12 +514,14 @@ def create_app(node):
         transfers = counts.get("transfer", 0)
         calls = counts.get("call", 0)
         deploys = counts.get("deploy", 0)
+        coinbase = counts.get("coinbase", 0)
         avg_interval = bc.avg_block_interval(20)
         top = bc.top_accounts(10)
         return _json({
             "height": bc.height, "total_blocks": len(blocks),
             "total_tx": total_tx, "transfers": transfers, "calls": calls,
-            "deploys": deploys, "accounts": len(bc.state.accounts),
+            "deploys": deploys, "coinbase": coinbase,
+            "accounts": len(bc.state.accounts),
             "contracts": len(bc.state.contracts),
             "txpool": node.txpool.size(), "chainwork": bc.chainwork,
             "avg_block_interval": round(avg_interval, 2),
